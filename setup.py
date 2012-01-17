@@ -17,8 +17,8 @@ __version__ = version
 
 
 if (not hasattr(sys, 'version_info')
-    or sys.version_info < (2, 6, 6, 'final', 0)):
-    raise SystemExit('Python 2.6.6 or later required to build kcorrect.')
+    or sys.version_info < (2, 6, 2, 'final', 0)):
+    raise SystemExit('Python 2.6.2 or later required to build kcorrect.')
 
 
 # def add_user_options():

@@ -1,3 +1,4 @@
+kcorrect/kcorrect_wrap.c
 *.pyc
 build
 tmp
