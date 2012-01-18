@@ -4,22 +4,37 @@ Installation
 This version of KCorrect requires the following software to be already
 installed on your machine:
 
-  -- Python 2.3.5 or better (http://www.python.org/)
-  -- NumPy 1.0rc1 or better (http://www.scipy.org/Download/)
-  -- SWIG 1.3.24 or better (http://www.swig.org/)
+  -- Python 2.6.2 or better (http://www.python.org/)
+  -- NumPy 1.4.1 or better (http://www.scipy.org/Download/)
+  -- SWIG 2.0.4 or better (http://www.swig.org/)
 
-(Rather I should mention these are the versions of software used to
-test the codes.)
+(I should mention these are the versions of software used to test the
+code.)
 
 After making sure the above software are installed properly, simply
 do:
 
-  # python setup.py install
+  $ sudo python setup.py install
 
-as root to install KCorrect in Python's site-packages directory.  If
-you wish to install KCorrect in some other local directory (i.e., you
-cannot become root), do
+to install KCorrect in the Python's default site-packages directory.
+If you wish to install KCorrect in some other local directory (i.e.,
+you cannot become root), do
 
-  $ python setup.py install --prefix='~'
+  $ python setup.py install --prefix=~
 
-to install KCorrect in ~/lib/python2.3/site-packages, for example.
+to install KCorrect in ~/lib/python2.6/site-packages, for example.
+
+SWIG Version
+------------ 
+
+This version of kcorrect may have a compilation issue with SWIG 1.3.
+The symptom is that the program segfauts at certain points during
+running.
+
+If your system does not have the required version of SWIG installed,
+you can instruct distutils to use another version of SWIG (manually)
+installed under a non-system directory.  For example,
+
+  $ python setup.py build_ext --swig=/usr/local/bin/swig
+
+will use the version of SWIG installed under /usr/local.
