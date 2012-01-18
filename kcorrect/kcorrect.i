@@ -11,6 +11,7 @@ interface written by Taro Sato."
 %enddef
 
 %module(docstring=DOCSTR_MAIN) clib
+%include "typemaps.i"
 
 %{
 /* Includes the header in the wrapper code */
