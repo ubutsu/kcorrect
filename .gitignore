@@ -1,3 +1,4 @@
+kcorrect/clib.py
 kcorrect/kcorrect_wrap.c
 *.pyc
 build
