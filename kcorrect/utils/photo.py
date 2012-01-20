@@ -229,3 +229,23 @@ def reconstruct_maggie(coeffs, redshift, ptable):
     See IDL procedure fit/k_reconstruct_maggies.pro in kcorrect v4_2.
     """
     return k_reconstruct_maggies(coeffs, redshift, ptable[0], ptable[1])
+
+
+def abmag2flam(mag, lam, magerr=None):
+    """
+    Convert AB magnitude into flux in erg / s / cm^2 / angstrom.
+
+    Parameters
+    ----------
+    mag : array_like
+        Photometry in AB magnitude.
+    lam : array_like
+        Wavelength in angstrom at which the flux is measured.
+    magerr : array_like, optional
+        AB magnitude uncertainty.
+    """
+    flam = 10**( (mag + 48.60) / -2.5 ) * (+3e18 / lam**2)
+    if magerr is None:
+        return flam
+    dflam = flam * (1. - 10**(-0.4 * magerr))
+    return flam, dflam
