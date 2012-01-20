@@ -149,4 +149,14 @@ class FilterList(object):
         plt.legend(loc='best')
         plt.show()
 
-
+    def fwhm(self):
+        """
+        Compute FWHM (min and max wavelengths).
+        """
+        fwhms = []
+        for i, (x, y) in enumerate(self.load_filters()):
+            hm = np.max(y) / 2.
+            m = y > hm
+            x = x[m]
+            fwhms.append((x[0], x[-1]))
+        return fwhms

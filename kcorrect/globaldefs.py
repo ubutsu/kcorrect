@@ -30,7 +30,7 @@ COSMO_DEFAULT = (0.3, 0.7, 0.7)
 
 # default redshift range (zmin, zmax, # of points)
 #ZRANGE_DEFAULT = (0.0, 2.0, 1000)
-ZRANGE_DEFAULT = (0.0, 10.0, 5000)
+ZRANGE_DEFAULT = (0.0, 2.0, 1000)
 
 # within the kcorrect C library, float C type is consistently used.
 FTYPE = float32

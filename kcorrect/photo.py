@@ -7,6 +7,8 @@ import numpy as np
 from kcorrect.filter import FilterList
 from kcorrect.globaldefs import COSMO_DEFAULT, FTYPE
 from kcorrect.projectiontable import PTABLE_MASTER
+from kcorrect.utils.cosmology import ztodm
+from kcorrect.utils.photo import maggie2ab, reconstruct_maggie
 
 
 class Photo(object):
@@ -92,3 +94,84 @@ class Photo(object):
     #     """
     #     # simply return maggies in this base class
     #     return photo, photo_ivar
+
+    def appmag(self, filter_list=None, redshift=None):
+        """
+        Compute apparent AB magnitudes from best fit SED models.
+
+        Computes the apparent magnitudes through a set of filters
+        convolving the best fit SED models.  Optionally, the objects
+        to be observed can be moved to different redshifts than the
+        input redshifts; i.e., the best fit SEDs are redshifted
+        arbitrarily and *observed* with the set of filters.
+
+        Parameters
+        ----------
+        filter_list : A FilterList object, optional
+            A set of filters.
+        redshift : array_like, optional
+            A redshift or a 1D array of redshift (with the number of
+            elements equal to the number of input objects) to observe
+            galaxies at arbitrary redshifts
+        """
+        filter_list = self.filter_list if filter_list is None else filter_list
+        
+        if redshift is None:
+            # simply observe the input objects with given filters
+            maggie = reconstruct_maggie(self.coeffs, self.redshift,
+                                        self.ptable[filter_list])
+            return maggie2ab(maggie)
+
+        # when redshifts are given, use them
+        redshift = np.atleast_1d(redshift).astype(FTYPE)
+        if redshift.size == 1:
+            redshift = np.ones(self.redshift.shape, dtype=FTYPE) * redshift[0]
+        else:
+            redshift = np.reshape(redshift, self.redshift.shape)
+
+        maggie_S = reconstruct_maggie(self.coeffs, redshift,
+                                      self.ptable[filter_list])
+        m_S = maggie2ab(maggie_S)
+        dm1 = ztodm(self.redshift, self.cosmo)
+        dm2 = ztodm(redshift, self.cosmo)
+
+        # because of what reconstruct_maggie returns, the flux needs
+        # to be rescaled by the ratio of distances
+        return m_S - dm1 + dm2
+
+    def model_spectrum(self, index=None, lmin=None, lmax=None):
+        """
+        Returns the best fit SED(s) in the rest frame.
+
+        The output SED is in units of erg s^-1 cm^-2 A^-1.
+
+        Parameters
+        ----------
+        index : array of indices
+            The index(ices) of the object for which spectrum is obtained.
+        lmin : float
+            Minimum wavelength in angstrom.
+        lmax : float
+            Maximum wavelength in angstrom.
+        """
+        lamb, vmatrix = self.ptable[self.filter_list].templates
+        lamb = 0.5 * (lamb[:-1] + lamb[1:])
+        vmatrix = np.transpose(vmatrix)
+
+        if (lmin is not None) or (lmax is not None):
+            mask = np.ones(lamb.shape, dtype=bool)
+            mask = mask if lmin is None else mask * np.greater(lamb, lmin)
+            mask = mask if lmax is None else mask * np.less(lamb, lmax)
+            lamb = lamb[mask]
+            vmatrix = np.compress(mask, vmatrix, axis=0)
+
+        index = (np.arange(0, len(self)) if index is None
+                 else np.atleast_1d(np.asarray(index, dtype=int)))
+
+        data = []
+        for coeffs in self.coeffs[index]:
+            flux = np.add.reduce(np.transpose(vmatrix * coeffs))
+            data.append(flux)
+
+        return (lamb, np.asarray(data) if len(data) > 1 else data[0])
+
