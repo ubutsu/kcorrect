@@ -1,0 +1,7 @@
+CFHT MegaPrime and WIRCam bandpass transmission curves
+------------------------------------------------------
+
+ftcs -- Contains the filter transmission curves from SEDfit (Sawicki
+2011), made by Bobby Sorba.
+
+filter -- .par files for use with kcorrect.
