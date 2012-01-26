@@ -8,7 +8,6 @@ from __future__ import print_function
 #from __future__ import unicode_literals
 import os
 from numpy import float32
-#from kcorrect.projectiontable import ProjectionTableDB
 
 
 # make sure KCORRECT_DIR is set
@@ -31,6 +30,9 @@ COSMO_DEFAULT = (0.3, 0.7, 0.7)
 # default redshift range (zmin, zmax, # of points)
 #ZRANGE_DEFAULT = (0.0, 2.0, 1000)
 ZRANGE_DEFAULT = (0.0, 2.0, 1000)
+
+# template name
+VNAME = 'default'
 
 # within the kcorrect C library, float C type is consistently used.
 FTYPE = float32

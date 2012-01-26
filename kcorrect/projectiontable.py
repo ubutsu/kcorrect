@@ -4,15 +4,20 @@ from __future__ import division
 from __future__ import print_function
 #from __future__ import unicode_literals
 import numpy as np
-from kcorrect.globaldefs import DEFAULT_TEMPLATE_DIR, FTYPE, ZRANGE_DEFAULT
+from kcorrect.globaldefs import DEFAULT_TEMPLATE_DIR, FTYPE, ZRANGE_DEFAULT, VNAME
 from kcorrect.utils.io import path_to_file
 from kcorrect.filter import FilterList
 from kcorrect.clib import k_read_ascii_table, k_projection_table
 
 
-def load_vmatrix(vname='default', file_paths=None):
+def load_vmatrix(vname=VNAME, file_paths=None):
     """
     Load spectral template information.
+
+    Parameters
+    ----------
+    vname : str
+        Name of templates.
 
     Notes
     -----
@@ -56,7 +61,8 @@ def make_projection_table(templates, filter_list, zrange=ZRANGE_DEFAULT):
                                     + 0.5) / (1. * nz)
     filter_curves = filter_list.load_filters()
     band_shift = 0.
-    # k_projection_table.pro returns (zvals, rmatrix)
+    # k_projection_table.pro returns (zvals, rmatrix), so just
+    # following the convention.
     return zvals, k_projection_table(filter_curves,
                                      templates[0], templates[1],
                                      zvals, band_shift)
@@ -68,14 +74,14 @@ class ProjectionTable(tuple):
     filters and redshifts.
     """
 
-    def __new__(cls, filter_list, zrange=ZRANGE_DEFAULT, vname='default',
+    def __new__(cls, filter_list, zrange=ZRANGE_DEFAULT, vname=VNAME,
                 file_paths=None):
         templates = load_vmatrix(vname, file_paths)
         pt = make_projection_table(templates, filter_list, zrange)
-        return tuple.__new__(cls, pt)
+        return super(ProjectionTable, cls).__new__(pt)
 
-    def __init__(self, filter_list, zrange=ZRANGE_DEFAULT,
-                 vname='default', file_paths=None):
+    def __init__(self, filter_list, zrange=ZRANGE_DEFAULT, vname=VNAME,
+                 file_paths=None):
         self.filter_list = filter_list
         self.zrange = zrange
         self.vname = vname
@@ -88,12 +94,12 @@ class ProjectionTableDB(dict):
     A collection of ProjectionTable instances.
     """
     
-    def __init__(self, zrange=ZRANGE_DEFAULT, vname='default',
+    def __init__(self, zrange=ZRANGE_DEFAULT, vname=VNAME,
                  file_paths=None):
         self.zrange = zrange
         self.vname = vname
         self.file_paths = file_paths
-        dict.__init__(self, {})
+        super(ProjectionTableDB, self).__init__({})
 
     def __getitem__(self, key):
         # check the key format
@@ -103,14 +109,14 @@ class ProjectionTableDB(dict):
         # return if the projection table exists for the FilterList
         for fl in self.keys():
             if fl == filter_list:
-                return dict.__getitem__(self, fl)
+                return super(ProjectionTableDB, self).__getitem__(fl)
         # projection table does not exist for the FilterList, so make
         # a new one
         self[filter_list] = ProjectionTable(filter_list,
                                             self.zrange,
                                             self.vname,
                                             self.file_paths)
-        return dict.__getitem__(self, filter_list)
+        return super(ProjectionTableDB, self).__getitem__(filter_list)
 
 
 # global master projection table database
