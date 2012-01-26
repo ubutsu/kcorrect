@@ -8,7 +8,7 @@ from __future__ import print_function
 #from __future__ import unicode_literals
 import numpy as np
 from kcorrect.clib import k_fit_nonneg, k_fit_photoz, k_reconstruct_maggies
-from kcorrect.globaldefs import FTYPE, KCORRECT_DIR
+from kcorrect.globaldefs import FTYPE, KCORRECT_DIR, ZRANGE_DEFAULT
 from kcorrect.utils.spec import project_filters, lamb_to_edges
 from kcorrect.utils.io import read_basel
 
@@ -167,8 +167,10 @@ def fit_nonneg(maggies, maggies_ivar, redshift, ptable,
 
 def fit_photoz(maggies, maggies_ivar, ptable, zpriors=None, lpriors=None, 
                maxiter=50000, tolerance=1e-6):
-    lpriors = np.zeros(2, dtype=FTYPE) if lpriors is None else lpriors
-    zpriors = np.array([0., 1000.], dtype=FTYPE) if zpriors is None else zpriors
+    lpriors = np.asarray(np.zeros(2) if lpriors is None else lpriors,
+                         dtype=FTYPE)
+    zpriors = np.asarray(ZRANGE_DEFAULT[:2] if zpriors is None else zpriors,
+                         dtype=FTYPE) 
     return k_fit_photoz(maggies,
                         maggies_ivar,
                         zpriors,

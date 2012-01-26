@@ -29,7 +29,7 @@ COSMO_DEFAULT = (0.3, 0.7, 0.7)
 
 # default redshift range (zmin, zmax, # of points)
 #ZRANGE_DEFAULT = (0.0, 2.0, 1000)
-ZRANGE_DEFAULT = (0.0, 2.0, 1000)
+ZRANGE_DEFAULT = (0.0, 6.0, 3000)
 
 # template name
 VNAME = 'default'
