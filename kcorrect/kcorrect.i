@@ -435,8 +435,6 @@ void py_k_fit_photoz( ARRAY *st_maggies,
   ngalaxy = st_maggies->dims[0];
   nprior = st_lpriors->dims[0];
 
-  printf("nprior = %d\n", nprior);
-
   st_photoz->nd = 1;
   st_photoz->dims = (IDL_LONG*)malloc(st_photoz->nd * sizeof(IDL_LONG));
   st_photoz->dims[0] = ngalaxy;
