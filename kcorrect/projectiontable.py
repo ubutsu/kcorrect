@@ -78,7 +78,7 @@ class ProjectionTable(tuple):
                 file_paths=None):
         templates = load_vmatrix(vname, file_paths)
         pt = make_projection_table(templates, filter_list, zrange)
-        return super(ProjectionTable, cls).__new__(pt)
+        return super(ProjectionTable, cls).__new__(cls, pt)
 
     def __init__(self, filter_list, zrange=ZRANGE_DEFAULT, vname=VNAME,
                  file_paths=None):
