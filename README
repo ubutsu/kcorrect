@@ -14,15 +14,25 @@ code.)
 After making sure the above software are installed properly, simply
 do:
 
+  $ python setup.py build_ext
   $ sudo python setup.py install
 
-to install KCorrect in the Python's default site-packages directory.
-If you wish to install KCorrect in some other local directory (i.e.,
-you cannot become root), do
+to install KCorrect in the Python's system-wide site-packages
+directory.  
+
+If you wish to install KCorrect in some other local directory (because
+you cannot become root, for example), do
 
   $ python setup.py install --prefix=~
 
-to install KCorrect in ~/lib/python2.6/site-packages, for example.
+to install KCorrect in ~/lib/python2.6/site-packages.  Note in this
+case that the path
+
+  ~/lib/python2.6/site-packages
+
+needs to be added to PYTHONPATH environment variable for Python to
+find the package.
+
 
 SWIG Version
 ------------ 
@@ -32,7 +42,7 @@ The symptom is that the program segfauts at certain points during
 running.
 
 If your system does not have the required version of SWIG installed,
-you can instruct distutils to use another version of SWIG (manually)
+you can instruct distutils to use another version of SWIG manually
 installed under a non-system directory.  For example,
 
   $ python setup.py build_ext --swig=/usr/local/bin/swig
