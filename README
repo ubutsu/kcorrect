@@ -6,6 +6,12 @@ the package is actively being moved to the AstroPy repository:
 with cleaner interface and binding with Cython to remove SWIG
 dependency.
 
+See the information about the tool here:
+
+http://howdy.physics.nyu.edu/index.php/Kcorrect
+
+This is a Python version of what the IDL version offers!
+
 
 Installation
 ------------
