@@ -1,10 +1,4 @@
-NOTE:  This is an older version of Python kcorrect.  As of August 2012,
-the package is actively being moved to the AstroPy repository:
-
-  https://github.com/astropy/kcorrect
-
-with cleaner interface and binding with Cython to remove SWIG
-dependency.
+NOTE:  This is an older version of Python kcorrect.
 
 See the information about the tool here:
 
